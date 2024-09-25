@@ -5,28 +5,21 @@ using UnityEngine;
 public class cat : MonoBehaviour
 {
     public string preferredFood;
-    public AudioClip goodSound;
-    public AudioClip touchBomb;
+    public AudioSource bombSound;
     public ScoreManager scoreManager;
 
-    void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        touchBomb = Resources.Load<AudioClip>("Materials/touchBomb");
-    }
-
-    public void Feed(string foodType)
-    {
-        if (foodType == preferredFood)
+        if (other.CompareTag("Food"))  // Ensure this matches the falling item's tag
         {
-            Debug.Log("Cat is happy!");
-            GetComponent<AudioSource>().PlayOneShot(goodSound);
-                // Add more logic for happy reaction, e.g., change sprite or animation
+            Debug.Log("Collected item!");
+            scoreManager.AddScore(100);  // Add 10 points to the score
+            Destroy(other.gameObject);  // Destroy the falling item
         }
-        else
+        else if (other.CompareTag("Bomb"))  // Ensure this matches the falling item's tag
         {
-            Debug.Log("Cat is sad.");
-            GetComponent<AudioSource>().PlayOneShot(touchBomb);
-                // Add more logic for sad reaction, e.g., change sprite or animation
+            Debug.Log("Collected bomb!");
+            Destroy(other.gameObject);  // Destroy the falling item
         }
     }
 }
