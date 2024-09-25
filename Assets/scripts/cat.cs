@@ -7,6 +7,8 @@ public class cat : MonoBehaviour
     public string preferredFood;
     public AudioClip goodSound;
     public AudioClip touchBomb;
+    public ScoreManager scoreManager;
+
     void Start()
     {
         touchBomb = Resources.Load<AudioClip>("Materials/touchBomb");

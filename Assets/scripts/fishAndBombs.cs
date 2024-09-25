@@ -7,4 +7,5 @@ public class food : MonoBehaviour
     // Start is called before the first frame update
     public string foodType;
     
+    
 }
