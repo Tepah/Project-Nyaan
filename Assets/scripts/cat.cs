@@ -5,22 +5,21 @@ using UnityEngine;
 public class cat : MonoBehaviour
 {
     public string preferredFood;
-    public AudioClip goodSound;
-    public AudioClip sadSound;
-
-    // public void Feed()
-    // {
-    //     if (foodType == preferredFood)
-    //     {
-    //         Debug.Log("Cat is happy!");
-    //         //GetComponent<AudioSource>().PlayOneShot(happySound);
-    //             // Add more logic for happy reaction, e.g., change sprite or animation
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("Cat is Dead.");
-    //         //GetComponent<AudioSource>().PlayOneShot(touchBomb.mp3);
-    //             // Add more logic for sad reaction, e.g., change sprite or animation
-    //     }
-    // }
+    public AudioSource bombSound;
+    public ScoreManager scoreManager;
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Food"))  // Ensure this matches the falling item's tag
+        {
+            Debug.Log("Collected item!");
+            scoreManager.AddScore(100);  // Add 10 points to the score
+            Destroy(other.gameObject);  // Destroy the falling item
+        }
+        else if (other.CompareTag("Bomb"))  // Ensure this matches the falling item's tag
+        {
+            Debug.Log("Collected bomb!");
+            Destroy(other.gameObject);  // Destroy the falling item
+        }
+    }
 }

@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "assignment1-cpsc386.sln"
+    "dotnet.defaultSolution": "test.sln"
 }
