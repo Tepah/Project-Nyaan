@@ -27,6 +27,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         Flip();
+        quitGame();
     }
 
     private void FixedUpdate()
@@ -48,6 +49,13 @@ public class PlayerControl : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
+        }
+    }
+    private void quitGame()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }
