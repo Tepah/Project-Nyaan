@@ -1,78 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class playerControl : MonoBehaviour
+public class PlayerControl : MonoBehaviour
 {
-    public float moveSpeed = 5f;        // Speed of the player's movement
-    public float jumpForce = 5f;        // Force applied when jumping
-    public LayerMask groundLayer;       // Layer representing the ground
-    public Transform groundCheck;       // Transform used to check if the player is on the ground
-    public float groundCheckRadius = 0.2f; // Radius of the ground check
-
-    private Rigidbody2D rb;
-    private bool isGrounded;
-    private bool isPaused = false;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    private float horizontal;
+    private float speed = 8f;
+    private float jumpingPower = 10f;
+    private bool isFacingRight = true;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
 
     void Update()
     {
-        // Check if the player is grounded
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Handle player movement and actions
-        Move();
-        Jump();
-        PauseGame();
-    }
-
-    void Move()
-    {
-        float moveInput = 0f;
-
-        // Check for left and right input
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetButtonDown("Jump") && isGrounded())
         {
-            moveInput = -1f; // Move left
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
-            moveInput = 1f; // Move right
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
 
-        // Apply the movement velocity
-        Vector2 moveVelocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
-        rb.velocity = moveVelocity;
+        Flip();
+        quitGame();
     }
 
-    void Jump()
+    private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+    }
+
+    private bool isGrounded() // Change void to bool
+    {
+        // Return true if the groundCheck overlaps with the groundLayer
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
         }
     }
-
-    void PauseGame()
+    private void quitGame()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            isPaused = !isPaused; // Toggle pause state
-
-            if (isPaused)
-            {
-                Time.timeScale = 0f; // Pause the game
-                Debug.Log("Game Paused");
-            }
-            else
-            {
-                Time.timeScale = 1f; // Resume the game
-                Debug.Log("Game Resumed");
-            }
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }
