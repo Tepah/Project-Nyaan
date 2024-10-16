@@ -7,6 +7,7 @@ public class cat : MonoBehaviour
 {
     public string preferredFood;
     public AudioSource bombSound;
+    public AudioSource itemSound;
     public ScoreManager scoreManager;
     
     private void OnTriggerEnter2D(Collider2D other)
