@@ -9,16 +9,24 @@ public class ScoreManager : MonoBehaviour
     public int score = 0;
     public int level = 1;
     private double[] pointMultiplyer = new double[]{1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5};
-    private int goalIndex = 0;
+    public int goalIndex = 0;
     private int[] goals = new int[]{1000, 3000, 7000, 15000, 31000, 63000, 127000, 255000, 511000, 1023000};
     public Text scoreText;
     public TextMeshProUGUI levelText;
+    public GameObject[] spawners;
 
     private string highScoreFilePath = "Assets/highScores.json";
 
     void Start()
     {
-        UpdateLevelText();
+        if (PlayerPrefs.HasKey("level"))
+        {
+            level = PlayerPrefs.GetInt("level");
+            goalIndex = level - 1;
+            PlayerPrefs.DeleteKey("level");
+        }
+
+        UpdateLevel();
         UpdateScoreText();
     }
 
@@ -30,7 +38,7 @@ public class ScoreManager : MonoBehaviour
         {
             level++;
             goalIndex++;
-            UpdateLevelText();
+            UpdateLevel();
         }
     }
 
@@ -39,9 +47,25 @@ public class ScoreManager : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
-    public void UpdateLevelText()
+    public void UpdateLevel()
     {
         levelText.text = "Level: " + level;
+        if (level > 1)
+        {
+            spawners[0].SetActive(true);
+        } 
+        if (level > 2)
+        {
+            spawners[1].SetActive(true);
+        } 
+        if (level > 3)
+        {
+            spawners[2].SetActive(true);
+        }
+        if (level > 4)
+        {
+            spawners[3].SetActive(true);
+        }
     }
 
     [System.Serializable]

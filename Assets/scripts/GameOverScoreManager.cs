@@ -31,13 +31,7 @@ public class GameOverScoreManager : MonoBehaviour
     {
         public List<HighScoreEntry> highScores = new List<HighScoreEntry>();
     }
-
-    public void SaveHighScores(HighScoreList highScoreList)
-    {
-        string json = JsonUtility.ToJson(highScoreList, true);
-        File.WriteAllText(highScoreFilePath, json);
-    }
-
+    
     public HighScoreList LoadHighScores()
     {
         if (File.Exists(highScoreFilePath))
