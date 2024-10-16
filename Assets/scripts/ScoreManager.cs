@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,6 +14,8 @@ public class ScoreManager : MonoBehaviour
     public Text scoreText;
     public TextMeshProUGUI levelText;
 
+    private string highScoreFilePath = "Assets/highScores.json";
+
     void Start()
     {
         UpdateLevelText();
@@ -20,7 +24,7 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore(int points)
     {
-        score += points * (int)pointMultiplyer[level - 1];
+        score += (int)(points * pointMultiplyer[level - 1]);
         UpdateScoreText();
         if (score >= goals[goalIndex] && goalIndex < goals.Length - 1)
         {
@@ -38,5 +42,49 @@ public class ScoreManager : MonoBehaviour
     public void UpdateLevelText()
     {
         levelText.text = "Level: " + level;
+    }
+
+    [System.Serializable]
+    public class HighScoreEntry
+    {
+        public int score;
+    }
+
+    [System.Serializable]
+    public class HighScoreList
+    {
+        public List<HighScoreEntry> highScores = new List<HighScoreEntry>();
+    }
+
+    public void SaveHighScores(HighScoreList highScoreList)
+    {
+        string json = JsonUtility.ToJson(highScoreList, true);
+        File.WriteAllText(highScoreFilePath, json);
+    }
+
+    public HighScoreList LoadHighScores()
+    {
+        if (File.Exists(highScoreFilePath))
+        {
+            string json = File.ReadAllText(highScoreFilePath);
+            return JsonUtility.FromJson<HighScoreList>(json);
+        }
+        return new HighScoreList();
+    }
+
+    public void UpdateHighScores()
+    {
+        HighScoreList highScoreList = LoadHighScores();
+        HighScoreEntry newEntry = new HighScoreEntry { score = score };
+
+        highScoreList.highScores.Add(newEntry);
+        highScoreList.highScores.Sort((x, y) => y.score.CompareTo(x.score)); 
+
+        if (highScoreList.highScores.Count > 10)
+        {
+            highScoreList.highScores.RemoveAt(highScoreList.highScores.Count - 1);
+        }
+
+        SaveHighScores(highScoreList);
     }
 }

@@ -22,6 +22,8 @@ public class cat : MonoBehaviour
         {
             Debug.Log("Collected bomb!");
             Destroy(other.gameObject);  // Destroy the falling item
+            PlayerPrefs.SetInt("score", scoreManager.score);
+            scoreManager.UpdateHighScores();
             SceneManager.LoadScene("GameOver"); 
         }
     }
