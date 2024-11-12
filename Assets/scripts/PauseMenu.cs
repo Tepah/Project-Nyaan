@@ -44,20 +44,18 @@ public class PauseMenu : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("bgVolume"))
         {
-            Debug.Log("bgVolume has key");
+            Debug.Log("bgVolume has key in Pause Menu");
             float volume = PlayerPrefs.GetFloat("bgVolume");
             backgroundSlider.value = volume;
-            AdjustBackgroundVolume(volume);
         } else {
             float volume = backgroundAudio.volume;
             backgroundSlider.value = volume;
         }
         if (PlayerPrefs.HasKey("fxVolume"))
         {
-            Debug.Log("fxVolume has key");
+            Debug.Log("fxVolume has key in Pause Menu");
             float volume = PlayerPrefs.GetFloat("fxVolume");
-            itemSound.volume = volume;
-            AdjustItemVolume(volume);
+            itemSlider.value = volume;
         } else {
             float volume = itemSound.volume;
             itemSlider.value = volume;
@@ -70,11 +68,6 @@ public class PauseMenu : MonoBehaviour
         PlayerPrefs.SetFloat("fxVolume", itemSound.volume);
     }
 
-    public void AdjustBackgroundVolume(float volume)
-    {
-        backgroundAudio.volume = volume;
-    }
-
     public void AdjustItemVolume(float volume)
     {
         itemSound.volume = volume;
@@ -82,8 +75,8 @@ public class PauseMenu : MonoBehaviour
 
     public void CloseSettings() 
     {
-        AdjustBackgroundVolume(backgroundSlider.value);
-        AdjustItemVolume(itemSlider.value);
+        backgroundAudio.volume = backgroundSlider.value;
+        itemSound.volume = itemSlider.value;
         SaveVolume();
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(true);
