@@ -14,7 +14,10 @@ public class MainMenu : MonoBehaviour
     public Button level3Button;
     public Button level4Button;
     public GameObject levelSelection;
+    public GameObject settings;
     public GameObject mainMenu;
+    public Slider backgroundSlider;
+    public Slider itemSlider;
 
     public void Start()
     {
@@ -23,7 +26,6 @@ public class MainMenu : MonoBehaviour
         {
             levelsButton.interactable = true;
         }
-
     }
 
     public void Play()
@@ -52,6 +54,45 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void Settings()
+    {
+        settings.SetActive(true);
+        mainMenu.SetActive(false);
+        LoadVolume();
+    }
+
+    public void LoadVolume()
+    {
+        if (PlayerPrefs.HasKey("bgVolume"))
+        {
+            Debug.Log("bgVolume has key");
+            float volume = PlayerPrefs.GetFloat("bgVolume");
+            backgroundSlider.value = volume;
+        } else {
+            float volume = 0.5F;
+            backgroundSlider.value = volume;
+        }
+        if (PlayerPrefs.HasKey("fxVolume"))
+        {
+            Debug.Log("fxVolume has key");
+            float volume = PlayerPrefs.GetFloat("fxVolume");
+            itemSlider.value = volume;
+        } else {
+            float volume = 0.5F;
+            itemSlider.value = volume;
+        }
+    }
+
+    public void onBgVolumeChange()
+    {
+        PlayerPrefs.SetFloat("bgVolume", backgroundSlider.value);
+    }
+
+    public void onFxVolumeChange()
+    {
+        PlayerPrefs.SetFloat("fxVolume", itemSlider.value);
+    }
+
     public void onClickLevel2() 
     {
         PlayerPrefs.SetInt("level", 2);
@@ -73,6 +114,7 @@ public class MainMenu : MonoBehaviour
     public void Back()
     {
         levelSelection.SetActive(false);
+        settings.SetActive(false);
         mainMenu.SetActive(true);
     }
 
