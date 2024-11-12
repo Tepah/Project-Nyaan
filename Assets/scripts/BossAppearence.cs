@@ -4,82 +4,81 @@ using UnityEngine;
 
 public class BossAppearence : MonoBehaviour
 {
-    public int scoreThreshold = 0;
-    public GameObject bossSprite;
-    public GameObject playerSprite;   // Reference to the player sprite
+    public GameObject player;
     public float followSpeed = 2f;
-    public float jumpSpeed = 5f;
+    public float jumpForce = 5f;
     public float jumpCoolDown = 3f;
 
     private float jumpTimer;
-    private int playerScore = 0;
-    private bool bossActive = false;
-    private ScoreManager scoreManager;
-
+    private bool isFacingRight = true;
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-
+    
     void Start()
-    {
-        bossSprite.SetActive(false);
+    {   
         jumpTimer = jumpCoolDown;
-        scoreManager = FindObjectOfType<ScoreManager>();
 
-        if (scoreManager == null)
+        if (player == null)
         {
-            Debug.LogError("ScoreManager not found in the scene.");
+            Debug.LogError("Player not assigned in BossAppearence.cs");
         }
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("RigidBody2D component is missing");
+        }
+
     }
 
     void Update()
     {
-        if (!bossActive && playerScore >= scoreThreshold)
-        {
-            ActivateBoss();
-        }
-
-        if (bossActive)
-        {
-            FollowPlayer();
-            JumpTowardsPlayer();
-        }
-    }
-
-    void ActivateBoss()
-    {
-        bossSprite.SetActive(true);
-        bossActive = true;
+        FollowPlayer();
+        JumpTowardsPlayer();
     }
 
     void FollowPlayer()
     {
-        Vector3 playerPosition = playerSprite.transform.position;  // Access player position
-        Vector3 bossPosition = bossSprite.transform.position;
+        Vector3 playerPosition = player.transform.position;
+        Vector3 bossPosition = transform.position;
 
         Vector3 direction = (playerPosition - bossPosition).normalized;
-        bossSprite.transform.position = Vector3.MoveTowards(bossPosition, playerPosition, followSpeed * Time.deltaTime);
+
+        rb.velocity = new Vector2(direction.x * followSpeed, rb.velocity.y);
+
+        FlipBoss(direction.x);
     }
 
     void JumpTowardsPlayer()
     {
         jumpTimer -= Time.deltaTime;
 
-        if (jumpTimer <= 0f)
+        if (jumpTimer <= 0f && isGrounded())
         {
             jumpTimer = jumpCoolDown;
-            Vector3 jumpDirection = (playerSprite.transform.position - bossSprite.transform.position).normalized;
-            bossSprite.transform.position += jumpDirection * jumpSpeed;
+            Vector2 jumpDirection = (player.transform.position - transform.position).normalized;
+            rb.AddForce(new Vector2(jumpDirection.x * jumpForce, jumpForce), ForceMode2D.Impulse);
+
+            FlipBoss(jumpDirection.x);
         }
     }
 
-    private bool isGrounded()
+    bool isGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, groundLayer);
+        return hit.collider != null;
     }
 
-    public void UpdateScore(int score)
+    void FlipBoss(float directionX)
     {
-        playerScore = score;
+        if (directionX > 0 && !isFacingRight)
+        {
+            isFacingRight = true;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y);
+        }
+        else if (directionX < 0 && isFacingRight)
+        {
+            isFacingRight = false;
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
+        }
     }
 }
