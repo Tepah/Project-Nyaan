@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class MainMenu : MonoBehaviour
     public GameObject levelSelection;
     public GameObject settings;
     public GameObject mainMenu;
+    public TextMeshProUGUI playText;
     public Slider backgroundSlider;
     public Slider itemSlider;
 
@@ -25,6 +27,11 @@ public class MainMenu : MonoBehaviour
         if (HighScores.highScores.Count != 0 && HighScores.highScores[0].score > 1000)
         {
             levelsButton.interactable = true;
+        }
+
+        if (PlayerPrefs.HasKey("level"))
+        {
+            playText.text = "Continue";
         }
     }
 
@@ -59,6 +66,20 @@ public class MainMenu : MonoBehaviour
         settings.SetActive(true);
         mainMenu.SetActive(false);
         LoadVolume();
+    }
+
+    public void ResetScores()
+    {
+        HighScores.highScores.Clear();
+        string json = JsonUtility.ToJson(HighScores);
+        File.WriteAllText(highScoreFilePath, json);
+        levelsButton.interactable = false;
+        level2Button.interactable = false;
+        level3Button.interactable = false;
+        level4Button.interactable = false;
+        PlayerPrefs.DeleteKey("level");
+        PlayerPrefs.DeleteKey("score");
+        playText.text = "Start";
     }
 
     public void LoadVolume()
