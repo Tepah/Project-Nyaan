@@ -13,27 +13,40 @@ public class BossAppearence : MonoBehaviour
     private bool isFacingRight = true;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
+
     
     void Start()
     {   
-        jumpTimer = jumpCoolDown;
+        AcitvateBoss();
+        // jumpTimer = jumpCoolDown;
 
-        if (player == null)
-        {
-            Debug.LogError("Player not assigned in BossAppearence.cs");
-        }
-        rb = GetComponent<Rigidbody2D>();
-        if (rb == null)
-        {
-            Debug.LogError("RigidBody2D component is missing");
-        }
+        // if (player == null)
+        // {
+        //     Debug.LogError("Player not assigned in BossAppearence.cs");
+        // }
+        // rb = GetComponent<Rigidbody2D>();
+        // if (rb == null)
+        // {
+        //     Debug.LogError("RigidBody2D component is missing");
+        // }
+
+        // gameObject.SetActive(false);
 
     }
 
     void Update()
     {
-        FollowPlayer();
-        JumpTowardsPlayer();
+        if (gameObject.activeSelf)
+        {
+            FollowPlayer();
+            JumpTowardsPlayer();
+        }
+        
+    }
+
+    public void AcitvateBoss()
+    {
+        gameObject.SetActive(true);
     }
 
     void FollowPlayer()
