@@ -28,8 +28,8 @@ public class cat : MonoBehaviour
         }    
         else if (other.CompareTag("Boss"))
         {
-            Debug.Log("Boss touched player! Gamer Over");
-            PlayerPrefs.SetInt("score", scoreManager.score);
+            Debug.Log("Boss killed you");
+            Destroy(other.gameObject);
             scoreManager.UpdateHighScores();
             SceneManager.LoadScene("GameOver");
         }

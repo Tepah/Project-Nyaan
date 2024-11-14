@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class BossAppearence : MonoBehaviour
 {
     public GameObject player;
+    public ScoreManager scoreManager;
     public float followSpeed = 2f;
     public float jumpForce = 5f;
     public float jumpCoolDown = 3f;
@@ -13,29 +16,35 @@ public class BossAppearence : MonoBehaviour
     private bool isFacingRight = true;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
 
     
     void Start()
     {   
-        AcitvateBoss();
-        // jumpTimer = jumpCoolDown;
+        // AcitvateBoss();
+        jumpTimer = jumpCoolDown;
 
-        // if (player == null)
-        // {
-        //     Debug.LogError("Player not assigned in BossAppearence.cs");
-        // }
-        // rb = GetComponent<Rigidbody2D>();
-        // if (rb == null)
-        // {
-        //     Debug.LogError("RigidBody2D component is missing");
-        // }
+        if (player == null)
+        {
+            Debug.LogError("Player not assigned in BossAppearence.cs");
+        }
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("RigidBody2D component is missing");
+        }
 
-        // gameObject.SetActive(false);
+        gameObject.SetActive(false);
 
     }
 
     void Update()
     {
+        if (scoreManager != null && scoreManager.level >= 2 && !gameObject.activeSelf)
+        {
+            Debug.Log("level 2 reached");
+            AcitvateBoss();
+        }
         if (gameObject.activeSelf)
         {
             FollowPlayer();
@@ -46,7 +55,7 @@ public class BossAppearence : MonoBehaviour
 
     public void AcitvateBoss()
     {
-        gameObject.SetActive(true);
+        gameObject.SetActive(true); //activates boss
     }
 
     void FollowPlayer()
@@ -79,6 +88,22 @@ public class BossAppearence : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, groundLayer);
         return hit.collider != null;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject == player)
+        {
+            GameOver();
+        }
+    }
+
+    void GameOver()
+    {
+        Debug.Log("Boss touched player! Gamer Over");
+        PlayerPrefs.SetInt("score", scoreManager.score);
+        scoreManager.UpdateHighScores();
+        SceneManager.LoadScene("GameOver");
     }
 
     void FlipBoss(float directionX)
