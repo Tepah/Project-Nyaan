@@ -26,13 +26,6 @@ public class cat : MonoBehaviour
             scoreManager.UpdateHighScores();
             SceneManager.LoadScene("GameOver"); 
         }    
-        else if (other.CompareTag("Boss"))
-        {
-            Debug.Log("Boss killed you");
-            Destroy(other.gameObject);
-            scoreManager.UpdateHighScores();
-            SceneManager.LoadScene("GameOver");
-        }
     }
     
 }
