@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -14,7 +15,11 @@ public class MainMenu : MonoBehaviour
     public Button level3Button;
     public Button level4Button;
     public GameObject levelSelection;
+    public GameObject settings;
     public GameObject mainMenu;
+    public TextMeshProUGUI playText;
+    public Slider backgroundSlider;
+    public Slider itemSlider;
 
     public void Start()
     {
@@ -24,6 +29,10 @@ public class MainMenu : MonoBehaviour
             levelsButton.interactable = true;
         }
 
+        if (PlayerPrefs.HasKey("level"))
+        {
+            playText.text = "Continue";
+        }
     }
 
     public void Play()
@@ -56,6 +65,59 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void Settings()
+    {
+        settings.SetActive(true);
+        mainMenu.SetActive(false);
+        LoadVolume();
+    }
+
+    public void ResetScores()
+    {
+        HighScores.highScores.Clear();
+        string json = JsonUtility.ToJson(HighScores);
+        File.WriteAllText(highScoreFilePath, json);
+        levelsButton.interactable = false;
+        level2Button.interactable = false;
+        level3Button.interactable = false;
+        level4Button.interactable = false;
+        PlayerPrefs.DeleteKey("level");
+        PlayerPrefs.DeleteKey("score");
+        playText.text = "Start";
+    }
+
+    public void LoadVolume()
+    {
+        if (PlayerPrefs.HasKey("bgVolume"))
+        {
+            Debug.Log("bgVolume has key");
+            float volume = PlayerPrefs.GetFloat("bgVolume");
+            backgroundSlider.value = volume;
+        } else {
+            float volume = 0.5F;
+            backgroundSlider.value = volume;
+        }
+        if (PlayerPrefs.HasKey("fxVolume"))
+        {
+            Debug.Log("fxVolume has key");
+            float volume = PlayerPrefs.GetFloat("fxVolume");
+            itemSlider.value = volume;
+        } else {
+            float volume = 0.5F;
+            itemSlider.value = volume;
+        }
+    }
+
+    public void onBgVolumeChange()
+    {
+        PlayerPrefs.SetFloat("bgVolume", backgroundSlider.value);
+    }
+
+    public void onFxVolumeChange()
+    {
+        PlayerPrefs.SetFloat("fxVolume", itemSlider.value);
+    }
+
     public void onClickLevel2() 
     {
         PlayerPrefs.SetInt("level", 2);
@@ -77,6 +139,7 @@ public class MainMenu : MonoBehaviour
     public void Back()
     {
         levelSelection.SetActive(false);
+        settings.SetActive(false);
         mainMenu.SetActive(true);
     }
 

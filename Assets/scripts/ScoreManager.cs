@@ -2,18 +2,21 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
     public int score = 0;
     public int level = 1;
-    private double[] pointMultiplyer = new double[]{1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5};
+    private double[] pointMultiplyer = new double[]{1, 1.5, 2, 2.25, 2.5, 2.5, 2.5, 2.75, 3, 3.25};
     public int goalIndex = 0;
-    private int[] goals = new int[]{1000, 3000, 7000, 15000, 31000, 63000, 127000, 255000, 511000, 1023000};
+    private int[] goals = new int[]{100, 200, 300, 400, 500, 31000, 63000, 127000, 255000, 511000, 1023000};
     public Text scoreText;
     public TextMeshProUGUI levelText;
     public GameObject[] spawners;
+    public GameObject saveButtonPanel;
+    public AudioSource backgroundAudio;
 
     public BossAppearence bossAppearence;
 
@@ -24,6 +27,7 @@ public class ScoreManager : MonoBehaviour
         if (PlayerPrefs.HasKey("level"))
         {
             level = PlayerPrefs.GetInt("level");
+            score = PlayerPrefs.GetInt("score");
             goalIndex = level - 1;
             PlayerPrefs.DeleteKey("level");
         }
@@ -66,10 +70,27 @@ public class ScoreManager : MonoBehaviour
         {
             spawners[2].SetActive(true);
         }
-        if (level > 4)
+        if (level == 5 || level == 10)
         {
-            spawners[3].SetActive(true);
+            saveButtonPanel.SetActive(true);
+            Time.timeScale = 0;
+            backgroundAudio.Pause();  
         }
+    }
+
+    public void continueBossLevel()
+    {
+        PlayerPrefs.SetInt("level", level);
+        SceneManager.LoadScene("BossLevel");
+    }
+
+    public void SaveProgress()
+    {
+        PlayerPrefs.SetInt("level", level);
+        PlayerPrefs.SetInt("score", score);
+        Time.timeScale = 1;
+        backgroundAudio.UnPause();
+        SceneManager.LoadScene("MainMenu");
     }
 
     [System.Serializable]
