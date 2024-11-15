@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 9070798887754420456}
   - component: {fileID: 3531202830914846385}
   - component: {fileID: -4634736626013620004}
-  - component: {fileID: -3807787890427935084}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Bomb
@@ -163,16 +162,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.96
---- !u!114 &-3807787890427935084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 294672494684191436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f87e7aca4c8fc49d69cff19818bd7619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foodType: Bomb
