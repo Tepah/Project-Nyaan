@@ -37,9 +37,17 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("GamePlay");
+        int level = PlayerPrefs.GetInt("level", 1);
+        Debug.Log("Level: " + level);
+        if (level == 5)
+        {
+            Debug.Log("Sending to Boss");
+            SceneManager.LoadScene("GamePlayBoss");
+        } else {
+            SceneManager.LoadScene("GamePlay");
+        }
     }
-
+    
     public void Quit()
     {
         Application.Quit();
@@ -51,11 +59,11 @@ public class MainMenu : MonoBehaviour
         levelSelection.SetActive(true);
         mainMenu.SetActive(false);
 
-        if (HighScores.highScores[0].score > 3000)
+        if (HighScores.highScores[0].score > 1000)
         {
             level3Button.interactable = true;
         }
-        if (HighScores.highScores[0].score > 7000)
+        if (HighScores.highScores[0].score > 1500)
         {
             level4Button.interactable = true;
         }

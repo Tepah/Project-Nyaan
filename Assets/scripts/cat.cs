@@ -25,6 +25,7 @@ public class cat : MonoBehaviour
             PlayerPrefs.SetInt("score", scoreManager.score);
             scoreManager.UpdateHighScores();
             SceneManager.LoadScene("GameOver"); 
-        }
+        }    
     }
+    
 }

@@ -11,12 +11,14 @@ public class ScoreManager : MonoBehaviour
     public int level = 1;
     private double[] pointMultiplyer = new double[]{1, 1.5, 2, 2.25, 2.5, 2.5, 2.5, 2.75, 3, 3.25};
     public int goalIndex = 0;
-    private int[] goals = new int[]{100, 200, 300, 400, 500, 31000, 63000, 127000, 255000, 511000, 1023000};
+    private int[] goals = new int[]{500, 1000, 1500, 2000, 2750, 5000, 7500, 10000, 15000, 20000};
     public Text scoreText;
     public TextMeshProUGUI levelText;
     public GameObject[] spawners;
     public GameObject saveButtonPanel;
     public AudioSource backgroundAudio;
+
+    public BossAppearence bossAppearence;
 
     private string highScoreFilePath = "Assets/highScores.json";
 
@@ -28,10 +30,13 @@ public class ScoreManager : MonoBehaviour
             score = PlayerPrefs.GetInt("score");
             goalIndex = level - 1;
             PlayerPrefs.DeleteKey("level");
+            PlayerPrefs.DeleteKey("score");
+            if (level != 5 && level != 10){
+                UpdateLevel();
+            }
+            UpdateScoreText();
         }
 
-        UpdateLevel();
-        UpdateScoreText();
     }
 
     public void AddScore(int points)
@@ -46,6 +51,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+
     public void UpdateScoreText()
     {
         scoreText.text = score.ToString();
@@ -54,18 +60,21 @@ public class ScoreManager : MonoBehaviour
     public void UpdateLevel()
     {
         levelText.text = "Level: " + level;
+        
         if (level > 1)
         {
             spawners[0].SetActive(true);
         } 
-        if (level > 2)
+        if (level != 5 && level != 10)
         {
-            spawners[1].SetActive(true);
-        } 
-        if (level > 3)
-        {
-            spawners[2].SetActive(true);
+            if (level > 2) {
+                spawners[1].SetActive(true);
+            } 
+            if (level > 3) {
+                spawners[2].SetActive(true);
+            }
         }
+        
         if (level == 5 || level == 10)
         {
             saveButtonPanel.SetActive(true);
@@ -77,7 +86,9 @@ public class ScoreManager : MonoBehaviour
     public void continueBossLevel()
     {
         PlayerPrefs.SetInt("level", level);
-        SceneManager.LoadScene("BossLevel");
+        PlayerPrefs.SetInt("score", score);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("GamePlayBoss");
     }
 
     public void SaveProgress()
