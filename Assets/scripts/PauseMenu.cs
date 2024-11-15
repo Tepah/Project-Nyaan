@@ -12,12 +12,14 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] Slider itemSlider;
     public AudioSource backgroundAudio;
     public AudioSource itemSound;
+    public Timer timer;
 
     public void Pause() //pauses the game when clicked
     {   
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
         backgroundAudio.Pause();  
+        timer.pauseTimer();
     }
 
     public void Home() //quits the game and goes to main menu screen
@@ -31,6 +33,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
         backgroundAudio.UnPause();
+        timer.resumeTimer();
     }
 
     public void Settings()

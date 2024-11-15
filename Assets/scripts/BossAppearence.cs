@@ -8,7 +8,7 @@ public class BossAppearence : MonoBehaviour
 {
     public GameObject player;
     public ScoreManager scoreManager;
-    public float followSpeed = 2f;
+    public float followSpeed = 2.5f;
     public float jumpForce = 5f;
     public float jumpCoolDown = 3f;
 

@@ -30,6 +30,11 @@ public class ScoreManager : MonoBehaviour
             score = PlayerPrefs.GetInt("score");
             goalIndex = level - 1;
             PlayerPrefs.DeleteKey("level");
+            PlayerPrefs.DeleteKey("score");
+            if (level != 5 && level != 10){
+                UpdateLevel();
+            }
+            UpdateScoreText();
         }
 
         UpdateLevel();
@@ -62,14 +67,16 @@ public class ScoreManager : MonoBehaviour
         {
             spawners[0].SetActive(true);
         } 
-        if (level > 2)
+        if (level != 5 && level != 10)
         {
-            spawners[1].SetActive(true);
-        } 
-        if (level > 3)
-        {
-            spawners[2].SetActive(true);
+            if (level > 2) {
+                spawners[1].SetActive(true);
+            } 
+            if (level > 3) {
+                spawners[2].SetActive(true);
+            }
         }
+        
         if (level == 5 || level == 10)
         {
             saveButtonPanel.SetActive(true);
@@ -81,7 +88,9 @@ public class ScoreManager : MonoBehaviour
     public void continueBossLevel()
     {
         PlayerPrefs.SetInt("level", level);
-        SceneManager.LoadScene("BossLevel");
+        PlayerPrefs.SetInt("score", score);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("GamePlayBoss");
     }
 
     public void SaveProgress()
