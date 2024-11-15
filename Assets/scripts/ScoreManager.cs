@@ -53,12 +53,7 @@ public class ScoreManager : MonoBehaviour
     public void UpdateLevel()
     {
         levelText.text = "Level: " + level;
-
-        if (level == 2 && bossAppearence != null)
-        {
-            Debug.Log("level 2 reached, Activate boss!");
-            bossAppearence.AcitvateBoss();
-        }
+        
         if (level > 1)
         {
             spawners[0].SetActive(true);

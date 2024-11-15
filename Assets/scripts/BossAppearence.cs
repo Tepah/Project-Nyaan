@@ -33,29 +33,12 @@ public class BossAppearence : MonoBehaviour
         {
             Debug.LogError("RigidBody2D component is missing");
         }
-
-        gameObject.SetActive(false);
-
     }
 
     void Update()
     {
-        if (scoreManager != null && scoreManager.level >= 2 && !gameObject.activeSelf)
-        {
-            Debug.Log("level 2 reached");
-            AcitvateBoss();
-        }
-        if (gameObject.activeSelf)
-        {
-            FollowPlayer();
-            JumpTowardsPlayer();
-        }
-        
-    }
-
-    public void AcitvateBoss()
-    {
-        gameObject.SetActive(true); //activates boss
+        FollowPlayer();
+        JumpTowardsPlayer();
     }
 
     void FollowPlayer()
