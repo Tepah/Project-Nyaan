@@ -1,28 +1,34 @@
 {
     "highScores": [
         {
+            "score": 2500
+        },
+        {
             "score": 1675
+        },
+        {
+            "score": 1175
+        },
+        {
+            "score": 675
         },
         {
             "score": 450
         },
         {
-            "score": 100
+            "score": 450
         },
         {
-            "score": 100
+            "score": 450
         },
         {
-            "score": 0
+            "score": 450
         },
         {
-            "score": 0
+            "score": 450
         },
         {
-            "score": 0
-        },
-        {
-            "score": 0
+            "score": 450
         }
     ]
 }

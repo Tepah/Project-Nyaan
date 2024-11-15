@@ -3410,7 +3410,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457390282c36a4552b4b74852c10aa79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeRemaining: 60
+  timeRemaining: 30
+  totalTime: 30
   timerIsRunning: 0
   timerSlider: {fileID: 1709637244}
 --- !u!1 &1210805977

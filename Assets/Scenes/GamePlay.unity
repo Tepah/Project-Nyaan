@@ -941,7 +941,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 325945470}
         m_TargetAssemblyTypeName: PlayerControl, Assembly-CSharp
-        m_MethodName: onLanding
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2496,6 +2496,7 @@ MonoBehaviour:
   - {fileID: 2086887443}
   saveButtonPanel: {fileID: 1517550349}
   backgroundAudio: {fileID: 469973321}
+  bossAppearence: {fileID: 0}
 --- !u!4 &797439637
 Transform:
   m_ObjectHideFlags: 0
@@ -2715,6 +2716,7 @@ MonoBehaviour:
   itemSlider: {fileID: 1621671071}
   backgroundAudio: {fileID: 469973321}
   itemSound: {fileID: 584883452}
+  timer: {fileID: 0}
 --- !u!1 &875626173
 GameObject:
   m_ObjectHideFlags: 0
@@ -4383,6 +4385,7 @@ MonoBehaviour:
   itemSlider: {fileID: 1621671071}
   backgroundAudio: {fileID: 469973321}
   itemSound: {fileID: 584883452}
+  timer: {fileID: 0}
 --- !u!114 &1517550352
 MonoBehaviour:
   m_ObjectHideFlags: 0
