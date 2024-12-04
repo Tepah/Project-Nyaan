@@ -50,7 +50,6 @@ public class PlayerControl : MonoBehaviour
     public void onLanding()
     {
         animator.SetBool("isJumping", false);
-        OnLandEvent.Invoke();
     }
 
     private void FixedUpdate()

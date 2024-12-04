@@ -35,6 +35,12 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void Unlimited()
+    {
+        PlayerPrefs.SetInt("level", 6);
+        SceneManager.LoadScene("GamePlay");
+    }
+
     public void Play()
     {
         int level = PlayerPrefs.GetInt("level", 1);
