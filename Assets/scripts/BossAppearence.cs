@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class BossAppearence : MonoBehaviour
 {
     public GameObject player;
     public ScoreManager scoreManager;
     public float followSpeed = 2.5f;
     public float jumpForce = 5f;
-    public float jumpCoolDown = 3f;
+    public float jumpCoolDown = 2f; // Reduced to 2 seconds
 
     private float jumpTimer;
     private bool isFacingRight = true;
@@ -18,16 +17,15 @@ public class BossAppearence : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
 
-    
     void Start()
-    {   
-        // AcitvateBoss();
+    {
         jumpTimer = jumpCoolDown;
 
         if (player == null)
         {
             Debug.LogError("Player not assigned in BossAppearence.cs");
         }
+
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -38,7 +36,16 @@ public class BossAppearence : MonoBehaviour
     void Update()
     {
         FollowPlayer();
-        JumpTowardsPlayer();
+        JumpInterval(); // Automatically jump every 2 seconds
+    }
+
+    void FixedUpdate()
+    {
+        // Restore gravity scale when falling
+        if (rb.velocity.y < 0)
+        {
+            rb.gravityScale = 2f; // Faster descent
+        }
     }
 
     void FollowPlayer()
@@ -53,23 +60,34 @@ public class BossAppearence : MonoBehaviour
         FlipBoss(direction.x);
     }
 
-    void JumpTowardsPlayer()
+    void JumpInterval()
     {
         jumpTimer -= Time.deltaTime;
 
-        if (jumpTimer <= 0f && isGrounded())
+        if (jumpTimer <= 0f)
         {
-            jumpTimer = jumpCoolDown;
-            Vector2 jumpDirection = (player.transform.position - transform.position).normalized;
-            rb.AddForce(new Vector2(jumpDirection.x * jumpForce, jumpForce), ForceMode2D.Impulse);
+            jumpTimer = jumpCoolDown; // Reset the timer
 
-            FlipBoss(jumpDirection.x);
+            if (isGrounded())
+            {
+                rb.AddForce(Vector2.up * (jumpForce * 1.5f), ForceMode2D.Impulse); // Jump with lower force
+                rb.gravityScale = 0.5f; // Slow upward movement
+                Debug.Log("Boss jumped!");
+            }
+            else
+            {
+                Debug.Log("Boss not grounded, skipping jump.");
+            }
         }
     }
 
     bool isGrounded()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.1f, groundLayer);
+        float rayLength = 0.5f;
+        RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, rayLength, groundLayer);
+
+        Debug.DrawRay(groundCheck.position, Vector2.down * rayLength, Color.red);
+
         return hit.collider != null;
     }
 
@@ -83,7 +101,7 @@ public class BossAppearence : MonoBehaviour
 
     void GameOver()
     {
-        Debug.Log("Boss touched player! Gamer Over");
+        Debug.Log("Boss touched player! Game Over");
         PlayerPrefs.SetInt("score", scoreManager.score);
         scoreManager.UpdateHighScores();
         SceneManager.LoadScene("GameOver");

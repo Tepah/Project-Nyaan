@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class Timer: MonoBehaviour
 {
-    public float timeRemaining = 60;
-    public float totalTime = 60;
+    public float timeRemaining = 90;
+    public float totalTime = 90;
     public bool timerIsRunning = false;
     public Slider timerSlider;
 

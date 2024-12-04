@@ -9,7 +9,7 @@ public class PlayerControl : MonoBehaviour
     public Animator animator;
     private float horizontal;
     private float speed = 8f;
-    private float jumpingPower = 10f;
+    private float jumpingPower = 9f;
     private bool isFacingRight = true;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
